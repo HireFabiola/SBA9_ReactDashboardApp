@@ -28,18 +28,17 @@
   margin-bottom: 2rem;
   padding: 1.5rem 1.75rem;
   border-radius: 16px;
- color: #f8fafc;
   background: linear-gradient(
     135deg,
     #1e293b,
     #312e81
   );
 
-  color: white;
+  color: #ffffff;
 }
 
 .dashboard-hero h1 {
-  color: white;
+  color: #ffffff;
 }
 
 .dashboard-hero p {
@@ -326,7 +325,6 @@
     align-items: stretch;
   }
 }
-.dashboard-hero h1,
 .section-title-row h2 {
   color: #111827;   /* dark slate */
 }

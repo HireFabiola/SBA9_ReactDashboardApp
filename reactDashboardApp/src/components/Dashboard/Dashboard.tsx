@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import tasksData from "../../data/tasks.json";
-import type { Task, TaskStatus } from "../../types/index";
+import type { Task, TaskStatus } from "../../types";
 import { TaskList } from "../TaskList/TaskList";
 import { TaskFilter } from "../TaskFilter/TaskFilter";
 import { TaskForm } from "../TaskForm/TaskForm";
@@ -200,9 +200,12 @@ export function Dashboard() {
   const completedTasks = tasks.filter((task) => task.status === "completed").length;
   const inProgressTasks = tasks.filter((task) => task.status === "in-progress").length;
   const pendingTasks = tasks.filter((task) => task.status === "pending").length;
-  const highPriorityTasks = tasks.filter((task) => task.priority === "high").length;
+  const completedTaskList = tasks.filter((task) => task.status === "completed");
+  const inProgressTaskList = tasks.filter((task) => task.status === "in-progress");
+  const highPriorityTaskList = tasks.filter((task) => task.priority === "high");
+  const highPriorityTasks = highPriorityTaskList.length;
 
-  const overdueTasks = tasks.filter((task) => {
+  const overdueTaskList = tasks.filter((task) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -210,11 +213,8 @@ export function Dashboard() {
     dueDate.setHours(0, 0, 0, 0);
 
     return task.status !== "completed" && dueDate < today;
-  }).length;
-
-  // const completionPercentage = tasks.length
-  //   ? Math.round((completedTasks / tasks.length) * 100)
-  //   : 0;
+  });
+  const overdueTasks = overdueTaskList.length;
 
   const completedPercentage = tasks.length
     ? Math.round((completedTasks / tasks.length) * 100)
@@ -276,11 +276,10 @@ export function Dashboard() {
 
             <div className="summary-hover-preview">
               <strong>Completed Tasks</strong>
-              {tasks.filter((task) => task.status === "completed").length === 0 ? (
+              {completedTaskList.length === 0 ? (
                 <p>No completed tasks.</p>
               ) : (
-                tasks
-                  .filter((task) => task.status === "completed")
+                completedTaskList
                   .slice(0, 4)
                   .map((task) => (
                     <p key={task.id}>
@@ -296,11 +295,10 @@ export function Dashboard() {
 
             <div className="summary-hover-preview">
               <strong>In Progress Tasks</strong>
-              {tasks.filter((task) => task.status === "in-progress").length === 0 ? (
+              {inProgressTaskList.length === 0 ? (
                 <p>No in-progress tasks.</p>
               ) : (
-                tasks
-                  .filter((task) => task.status === "in-progress")
+                inProgressTaskList
                   .slice(0, 4)
                   .map((task) => (
                     <p key={task.id}>
@@ -316,27 +314,10 @@ export function Dashboard() {
 
             <div className="summary-hover-preview">
               <strong>Overdue Tasks</strong>
-              {tasks.filter((task) => {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const dueDate = new Date(task.dueDate);
-                dueDate.setHours(0, 0, 0, 0);
-
-                return task.status !== "completed" && dueDate < today;
-              }).length === 0 ? (
+              {overdueTaskList.length === 0 ? (
                 <p>No overdue tasks.</p>
               ) : (
-                tasks
-                  .filter((task) => {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-
-                    const dueDate = new Date(task.dueDate);
-                    dueDate.setHours(0, 0, 0, 0);
-
-                    return task.status !== "completed" && dueDate < today;
-                  })
+                overdueTaskList
                   .slice(0, 4)
                   .map((task) => (
                     <p key={task.id}>
@@ -448,11 +429,10 @@ export function Dashboard() {
 
                 <div className="summary-hover-preview right-preview">
                   <strong>High Priority Tasks</strong>
-                  {tasks.filter((task) => task.priority === "high").length === 0 ? (
+                  {highPriorityTaskList.length === 0 ? (
                     <p>No high priority tasks.</p>
                   ) : (
-                    tasks
-                      .filter((task) => task.priority === "high")
+                    highPriorityTaskList
                       .slice(0, 4)
                       .map((task) => (
                         <p key={task.id}>

@@ -1,16 +1,22 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import type { TaskFormProps } from "../../types";
-import type { TaskStatus } from "../../types/index";
+import type { TaskFormProps, TaskPriority, TaskStatus } from "../../types";
 
+type TaskFormState = {
+  title: string;
+  description: string;
+  status: TaskStatus | "";
+  priority: TaskPriority | "";
+  dueDate: string;
+};
 
 export function TaskForm({ onAddTask, onClose }: TaskFormProps) {
- const [formData, setFormData] = useState({
-  title: "",
-  description: "",
-  status: "" as TaskStatus | "",
-  priority: "" as "low" | "medium" | "high" | "",
-  dueDate: "",
-});
+  const [formData, setFormData] = useState<TaskFormState>({
+    title: "",
+    description: "",
+    status: "",
+    priority: "",
+    dueDate: "",
+  });
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -26,7 +32,13 @@ export function TaskForm({ onAddTask, onClose }: TaskFormProps) {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    onAddTask(formData);
+    if (!formData.status || !formData.priority) return;
+
+    onAddTask({
+      ...formData,
+      status: formData.status,
+      priority: formData.priority,
+    });
     onClose();
   };
 

@@ -1,4 +1,4 @@
-import type { Task, TaskStatus } from "../../types/index";
+import type { Task, TaskStatus } from "../../types";
 import { TaskItem } from "./TaskItem";
 
 type TaskListProps = {
